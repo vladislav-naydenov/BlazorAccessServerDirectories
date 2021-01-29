@@ -1,0 +1,29 @@
+﻿@page "/directory"
+@using BlazorAccessServerDirectories.Shared
+
+@inject HttpClient http
+
+<h1>Directory contents</h1>
+
+@if (this.DirectoryContents != null)
+{
+    <ul>
+        @foreach (var directory in this.DirectoryContents)
+        {
+            <li><strong>@directory.Path</strong></li>
+        }
+    </ul>
+}
+
+@code {
+
+    public IEnumerable<DirectoryContent> DirectoryContents { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        this.DirectoryContents = await this.http.GetFromJsonAsync<IEnumerable<DirectoryContent>>("Directory");
+
+        await base.OnInitializedAsync();
+    }
+
+}
